@@ -15,8 +15,8 @@ formEl.addEventListener('submit', onFormSubmit);
 function onFormSubmit(e) {
   e.preventDefault();
   e.currentTarget.reset();
-  localStorage.removeItem(STORAGE_KEY);
   console.log(JSON.parse(localStorage.getItem(STORAGE_KEY)));
+  localStorage.removeItem(STORAGE_KEY);
 }
 
 function onImput(e) {
@@ -28,7 +28,6 @@ function onImput(e) {
 function populateInput() {
   const saveInput = localStorage.getItem(STORAGE_KEY);
 
-  console.log(localStorage.getItem(STORAGE_KEY));
   if (saveInput) {
     const objName = JSON.parse(saveInput);
 
