@@ -1,44 +1,38 @@
-import throttle from "lodash.throttle";
+import throttle from 'lodash.throttle';
 
-const refs = {
-    form: document.querySelector('.feedback-form'),
-    textarea: document.querySelector('textarea'),
-    input: document.querySelector('input'),
-};
+const STORAGE_KEY = 'feedback-form-state';
 
+let formData = {};
 
-refs.form.addEventListener('input', qwe)
+const formEl = document.querySelector('.feedback-form');
+const inputEL = document.querySelector('input');
+const textareaEl = document.querySelector('textarea');
+populateInput();
 
+formEl.addEventListener('input', throttle(onImput, 500));
+formEl.addEventListener('submit', onFormSubmit);
 
-function qwe(evt) {
-    const mes = evt.currentTarget.value;
-
-    localStorage.setItem('asd', mes);
+function onFormSubmit(e) {
+  e.preventDefault();
+  e.currentTarget.reset();
+  localStorage.removeItem(STORAGE_KEY);
+  console.log(JSON.parse(localStorage.getItem(STORAGE_KEY)));
 }
 
+function onImput(e) {
+  formData[e.target.name] = e.target.value;
 
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+}
 
+function populateInput() {
+  const saveInput = localStorage.getItem(STORAGE_KEY);
 
+  console.log(localStorage.getItem(STORAGE_KEY));
+  if (saveInput) {
+    const objName = JSON.parse(saveInput);
 
-
-
-
-
-
-
-
-
-// const formEl = document.querySelector(".login-form");
-
-// formEl.addEventListener("submit", (e) => {
-//   e.preventDefault();
-//   const {
-//     elements: { email, password },
-//   } = e.currentTarget;
-//   if (email.value === `` || password.value === ``) {
-//     return alert("Всі поля повинні бути заповнені!");
-//   }
-//   console.log(`Email: ${email.value}, Password: ${password.value}`);
-
-//   e.currentTarget.reset();
-// });
+    if (objName.email !== undefined) inputEL.value = objName.email;
+    if (objName.message !== undefined) textareaEl.value = objName.message;
+  }
+}
